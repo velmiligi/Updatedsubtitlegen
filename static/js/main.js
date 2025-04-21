@@ -175,6 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const formData = new FormData();
                 formData.append('file', file);
                 
+                // The server-side API will handle authentication with the token
                 const uploadResponse = await fetch(`https://${server}.gofile.io/uploadFile`, {
                     method: 'POST',
                     body: formData
@@ -189,11 +190,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 3. Create task for subtitle generation
                 updateModalStatus('Starting subtitle generation task...');
                 
+                const outputLanguageSelect = document.getElementById('output_language');
                 const taskData = {
                     gofile_id: uploadData.data.fileId,
                     gofile_link: uploadData.data.downloadPage,
                     filename: file.name,
                     language: languageSelect.value,
+                    output_language: outputLanguageSelect ? outputLanguageSelect.value : 'same',
                     model: modelSelect.value,
                     format: formatSelect.value
                 };

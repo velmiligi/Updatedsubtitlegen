@@ -15,6 +15,7 @@ class SubtitleTask(db.Model):
     
     # Processing parameters
     language = db.Column(db.String(10), nullable=False, default='auto')
+    output_language = db.Column(db.String(10), nullable=True, default='same')
     model = db.Column(db.String(20), nullable=False, default='base')
     format_type = db.Column(db.String(10), nullable=False, default='srt')
     
