@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow-lg mb-4">
+            <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-list-alt me-2 fs-4"></i>
+                    <h2 class="h4 mb-0">Your Subtitle Tasks</h2>
+                </div>
+                <a href="{{ url_for('index') }}" class="btn btn-sm btn-light">
+                    <i class="fas fa-plus me-1"></i> New Task
+                </a>
+            </div>
+            <div class="card-body p-4">
+                <div id="tasksList">
+                    <div class="text-center p-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Loading your tasks...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="alert alert-info">
+            <h4 class="alert-heading mb-2"><i class="fas fa-info-circle me-2"></i> About Subtitle Tasks</h4>
+            <p>All subtitle generation tasks are processed in the background and stored for 24 hours. You can leave this page and return later to check your completed tasks.</p>
+            <hr>
+            <p class="mb-0">Each task shows the status of your subtitle generation request, from uploading to completion. When complete, you can download your subtitle files directly.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
