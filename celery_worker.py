@@ -118,7 +118,8 @@ def generate_subtitles(self, task_id):
                     temp_path, 
                     language=task.language, 
                     model=task.model, 
-                    format_type=task.format_type
+                    format_type=task.format_type,
+                    output_language=task.output_language
                 )
                 
                 # Upload subtitles to Gofile

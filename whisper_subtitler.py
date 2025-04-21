@@ -47,8 +47,16 @@ def extract_audio(video_path):
         logger.error(f"Error extracting audio: {str(e)}")
         raise
 
-def transcribe_audio(audio_path, language='auto', model_name='base'):
-    """Transcribe audio using Whisper model."""
+def transcribe_audio(audio_path, language='auto', model_name='base', output_language=None):
+    """
+    Transcribe audio using Whisper model with optional translation to another language.
+    
+    Args:
+        audio_path: Path to audio file
+        language: Source language code or 'auto' for auto-detection
+        model_name: Whisper model size ('tiny', 'base', 'small', 'medium', 'large')
+        output_language: Language code to translate to (None or 'same' means no translation)
+    """
     try:
         # Load Whisper model
         logger.info(f"Loading Whisper model: {model_name}")
@@ -61,6 +69,13 @@ def transcribe_audio(audio_path, language='auto', model_name='base'):
         # Only set language if not auto
         if language != 'auto':
             transcription_options['language'] = language
+        
+        # Set task to translate if output language is specified and different from source
+        if output_language and output_language != 'same' and output_language != language:
+            transcription_options['task'] = 'translate'
+            transcription_options['language'] = language  # Source language
+            transcription_options['target_language'] = output_language  # Target language
+            logger.info(f"Translating from {language if language != 'auto' else 'auto-detected'} to {output_language}")
         
         result = model.transcribe(audio_path, **transcription_options)
         
@@ -125,10 +140,19 @@ def format_timestamp(seconds, vtt=False):
     else:
         return f"{hours:02d}:{minutes:02d}:{seconds:06.3f}".replace('.', ',')
 
-def process_file(file_path, language='auto', model='base', format_type='srt'):
-    """Process a media file to generate subtitles."""
+def process_file(file_path, language='auto', model='base', format_type='srt', output_language='same'):
+    """
+    Process a media file to generate subtitles.
+    
+    Args:
+        file_path: Path to media file
+        language: Source language code or 'auto' for auto-detection
+        model: Whisper model size ('tiny', 'base', 'small', 'medium', 'large')
+        format_type: Output format ('srt', 'vtt', 'txt')
+        output_language: Target language code for translation ('same' means no translation)
+    """
     logger.info(f"Processing file: {file_path}")
-    logger.info(f"Parameters: language={language}, model={model}, format={format_type}")
+    logger.info(f"Parameters: language={language}, output_language={output_language}, model={model}, format={format_type}")
     
     temp_files = []
     
@@ -145,7 +169,12 @@ def process_file(file_path, language='auto', model='base', format_type='srt'):
         
         # Transcribe the audio
         logger.info("Transcribing audio...")
-        transcription = transcribe_audio(audio_path, language, model)
+        transcription = transcribe_audio(
+            audio_path, 
+            language=language, 
+            model_name=model, 
+            output_language=None if output_language == 'same' else output_language
+        )
         
         # Format subtitles
         logger.info(f"Formatting subtitles as {format_type}...")

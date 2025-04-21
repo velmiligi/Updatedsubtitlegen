@@ -50,6 +50,7 @@ class SubtitleTask(db.Model):
             'original_filename': self.original_filename,
             'input_gofile_link': self.input_gofile_link,
             'language': self.language,
+            'output_language': self.output_language,
             'model': self.model,
             'format_type': self.format_type,
             'subtitle_gofile_link': self.subtitle_gofile_link,

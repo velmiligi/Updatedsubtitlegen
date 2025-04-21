@@ -63,6 +63,9 @@ def create_task():
         # Generate a unique task ID
         task_id = str(uuid.uuid4())
         
+        # Get output language (optional field)
+        output_language = data.get('output_language', 'same')
+        
         # Create a new task
         task = SubtitleTask(
             task_id=task_id,
@@ -72,6 +75,7 @@ def create_task():
             input_gofile_id=data['gofile_id'],
             input_gofile_link=data['gofile_link'],
             language=data['language'],
+            output_language=output_language,
             model=data['model'],
             format_type=data['format'],
             created_at=datetime.utcnow()
