@@ -23,13 +23,70 @@
                     </div>
                 </div>
 
-                <!-- Preview Section -->
-                <div class="row mb-4">
-                    <div class="col-md-12">
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="fas fa-eye me-2 text-primary"></i>
-                            <h4 class="mb-0">Preview</h4>
+                <!-- Tabs for different views -->
+                <ul class="nav nav-tabs mb-4" id="resultTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="editor-tab" data-bs-toggle="tab" data-bs-target="#editor" type="button" role="tab" aria-controls="editor" aria-selected="true">
+                            <i class="fas fa-edit me-2"></i>Subtitle Editor
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-tab" data-bs-toggle="tab" data-bs-target="#preview" type="button" role="tab" aria-controls="preview" aria-selected="false">
+                            <i class="fas fa-video me-2"></i>Video Preview
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="raw-tab" data-bs-toggle="tab" data-bs-target="#raw" type="button" role="tab" aria-controls="raw" aria-selected="false">
+                            <i class="fas fa-code me-2"></i>Raw Text
+                        </button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="resultTabsContent">
+                    <!-- Subtitle Editor Tab -->
+                    <div class="tab-pane fade show active" id="editor" role="tabpanel" aria-labelledby="editor-tab">
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    Edit your subtitles below. Changes will be applied when you click "Save Changes".
+                                </div>
+                                <div class="form-group">
+                                    <textarea id="subtitleEditor" class="form-control" rows="15" style="font-family: monospace;">{{ preview_content }}</textarea>
+                                </div>
+                                <div class="d-flex justify-content-end mt-3">
+                                    <button id="saveEditorChanges" class="btn btn-success">
+                                        <i class="fas fa-save me-2"></i>Save Changes
+                                    </button>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    
+                    <!-- Video Preview Tab -->
+                    <div class="tab-pane fade" id="preview" role="tabpanel" aria-labelledby="preview-tab">
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    Video preview requires the original video file. Upload it below for preview.
+                                </div>
+                                <div class="mb-3">
+                                    <label for="videoPreviewFile" class="form-label">Upload your video for preview</label>
+                                    <input class="form-control" type="file" id="videoPreviewFile" accept="video/*">
+                                </div>
+                                <div class="video-preview-container mb-3" style="display: none;">
+                                    <video id="previewVideo" controls class="w-100">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                    <div id="subtitleOverlay" class="subtitle-overlay"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Raw Text Tab -->
+                    <div class="tab-pane fade" id="raw" role="tabpanel" aria-labelledby="raw-tab">
                         <div class="subtitle-preview">
                             <pre class="text-light">{{ preview_content }}</pre>
                         </div>
@@ -37,13 +94,18 @@
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="row g-3">
-                    <div class="col-md-6 mb-3 mb-md-0">
+                <div class="row g-3 mt-4">
+                    <div class="col-md-4 mb-3 mb-md-0">
                         <a href="{{ task.subtitle_gofile_link }}" target="_blank" class="btn btn-primary btn-lg w-100">
                             <i class="fas fa-download me-2"></i>Download Subtitles
                         </a>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <button id="downloadEdited" class="btn btn-success btn-lg w-100">
+                            <i class="fas fa-file-download me-2"></i>Download Edited
+                        </button>
+                    </div>
+                    <div class="col-md-4">
                         <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary btn-lg w-100">
                             <i class="fas fa-redo me-2"></i>Process Another File
                         </a>

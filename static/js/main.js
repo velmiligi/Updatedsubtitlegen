@@ -1,4 +1,123 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Subtitle Editor & Video Preview functionality
+    const subtitleEditor = document.getElementById('subtitleEditor');
+    const saveEditorChanges = document.getElementById('saveEditorChanges');
+    const downloadEdited = document.getElementById('downloadEdited');
+    const videoPreviewFile = document.getElementById('videoPreviewFile');
+    const previewVideo = document.getElementById('previewVideo');
+    const subtitleOverlay = document.getElementById('subtitleOverlay');
+    const videoPreviewContainer = document.querySelector('.video-preview-container');
+    
+    // Handle subtitle editing
+    if (subtitleEditor && saveEditorChanges) {
+        saveEditorChanges.addEventListener('click', function() {
+            // Save the edited content
+            const editedContent = subtitleEditor.value;
+            localStorage.setItem('editedSubtitles', editedContent);
+            showFeedback('Subtitle changes saved successfully', 'success');
+        });
+    }
+    
+    // Handle downloading edited subtitles
+    if (downloadEdited) {
+        downloadEdited.addEventListener('click', function() {
+            const editedContent = localStorage.getItem('editedSubtitles') || subtitleEditor.value;
+            const blob = new Blob([editedContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'edited_subtitles.srt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    }
+    
+    // Handle video preview
+    if (videoPreviewFile && previewVideo && videoPreviewContainer) {
+        videoPreviewFile.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const file = e.target.files[0];
+                const videoURL = URL.createObjectURL(file);
+                previewVideo.src = videoURL;
+                videoPreviewContainer.style.display = 'block';
+                
+                // Load subtitles into overlay
+                loadSubtitles();
+                
+                // Clean up when video is unloaded
+                previewVideo.onended = function() {
+                    URL.revokeObjectURL(videoURL);
+                };
+            }
+        });
+        
+        // Handle showing subtitles during video playback
+        if (previewVideo && subtitleOverlay) {
+            previewVideo.addEventListener('timeupdate', function() {
+                updateSubtitleOverlay(previewVideo.currentTime);
+            });
+        }
+    }
+    
+    // Load and parse subtitles
+    function loadSubtitles() {
+        const subtitleText = localStorage.getItem('editedSubtitles') || subtitleEditor?.value;
+        if (subtitleText) {
+            window.parsedSubtitles = parseSubtitles(subtitleText);
+        }
+    }
+    
+    // Parse SRT format subtitles
+    function parseSubtitles(subtitleText) {
+        const subtitles = [];
+        const subtitleBlocks = subtitleText.trim().split(/\n\s*\n/);
+        
+        for (const block of subtitleBlocks) {
+            const lines = block.trim().split('\n');
+            if (lines.length >= 3) {
+                // Index is first line, timestamp is second, remaining lines are text
+                const timeMatch = lines[1].match(/(\d{2}:\d{2}:\d{2},\d{3}) --> (\d{2}:\d{2}:\d{2},\d{3})/);
+                if (timeMatch) {
+                    const startTime = timeStringToSeconds(timeMatch[1]);
+                    const endTime = timeStringToSeconds(timeMatch[2]);
+                    const text = lines.slice(2).join('\n');
+                    
+                    subtitles.push({
+                        start: startTime,
+                        end: endTime,
+                        text: text
+                    });
+                }
+            }
+        }
+        
+        return subtitles;
+    }
+    
+    // Convert timestamp string to seconds
+    function timeStringToSeconds(timeString) {
+        const parts = timeString.split(/[,:]/);
+        return parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseFloat(parts[2] + '.' + parts[3]);
+    }
+    
+    // Display subtitle at current video time
+    function updateSubtitleOverlay(currentTime) {
+        if (!window.parsedSubtitles || !subtitleOverlay) return;
+        
+        let subtitle = window.parsedSubtitles.find(sub => 
+            currentTime >= sub.start && currentTime <= sub.end
+        );
+        
+        if (subtitle) {
+            subtitleOverlay.textContent = subtitle.text;
+            subtitleOverlay.style.display = 'block';
+        } else {
+            subtitleOverlay.textContent = '';
+            subtitleOverlay.style.display = 'none';
+        }
+    }
     // Process form submission with Gofile and API task creation
     const uploadForm = document.getElementById('uploadForm');
     if (uploadForm) {
