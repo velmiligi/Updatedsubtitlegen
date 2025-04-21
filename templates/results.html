@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <!-- Success Card -->
+        <div class="card shadow-lg mb-4">
+            <div class="card-header bg-success text-white d-flex align-items-center">
+                <i class="fas fa-check-circle me-2 fs-4"></i>
+                <h1 class="h3 mb-0">Subtitles Generated Successfully!</h1>
+            </div>
+            <div class="card-body p-4">
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="alert alert-success d-flex align-items-center">
+                            <i class="fas fa-check-circle fs-4 me-3"></i>
+                            <div>
+                                <strong>Excellent!</strong> Your subtitles have been generated and are ready for download.
+                                <br>
+                                <span class="small">You can preview the content below or download the complete file.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Section -->
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-eye me-2 text-primary"></i>
+                            <h4 class="mb-0">Preview</h4>
+                        </div>
+                        <div class="subtitle-preview">
+                            <pre class="text-light">{{ preview_content }}</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="row g-3">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <a href="{{ task.subtitle_gofile_link }}" target="_blank" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-download me-2"></i>Download Subtitles
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary btn-lg w-100">
+                            <i class="fas fa-redo me-2"></i>Process Another File
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- What's Next Card -->
+        <div class="card shadow-lg">
+            <div class="card-header bg-info text-white d-flex align-items-center">
+                <i class="fas fa-lightbulb me-2 fs-4"></i>
+                <h2 class="h4 mb-0">What's Next?</h2>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-film"></i>
+                                </div>
+                                <h5 class="card-title fw-bold">Add to Video</h5>
+                                <p class="card-text text-muted">Use a video editor to add these subtitles to your video file for better accessibility.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <h5 class="card-title fw-bold">Edit Content</h5>
+                                <p class="card-text text-muted">Open the file in a subtitle editor to make timing adjustments or correct any transcription errors.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-language"></i>
+                                </div>
+                                <h5 class="card-title fw-bold">Translate</h5>
+                                <p class="card-text text-muted">Use translation tools to create subtitles in additional languages for a wider audience.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
