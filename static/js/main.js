@@ -395,12 +395,12 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td><span class="${statusClass} fw-bold">${statusDisplay}</span></td>
                         <td>${task.created_at}</td>
                         <td>
-                            <a href="/task/${task.task_id}" class="btn btn-sm btn-primary me-1">
+                            <a href="/task/${task.task_id}" class="btn btn-sm btn-primary me-1" title="View Task Details">
                                 <i class="fas fa-eye"></i>
                             </a>
                             ${task.status === 'completed' ? `
-                                <a href="${task.subtitle_gofile_link}" target="_blank" class="btn btn-sm btn-success">
-                                    <i class="fas fa-download"></i>
+                                <a href="${task.subtitle_gofile_link}" target="_blank" class="btn btn-sm btn-success" title="Download Subtitles">
+                                    <i class="fas fa-download me-1"></i>Download
                                 </a>
                             ` : ''}
                         </td>
