@@ -177,6 +177,34 @@ pre {
     margin-bottom: 0;
 }
 
+/* Video preview container and subtitle overlay */
+.video-preview-container {
+    position: relative;
+    width: 100%;
+    margin: 20px 0;
+    border-radius: var(--card-border-radius);
+    overflow: hidden;
+}
+
+.subtitle-overlay {
+    position: absolute;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 18px;
+    line-height: 1.5;
+    font-weight: 500;
+    z-index: 10;
+    margin: 0 auto;
+    max-width: 90%;
+    border-radius: 8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
 /* Footer styling */
 footer {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
