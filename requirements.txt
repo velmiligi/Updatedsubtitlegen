@@ -33,7 +33,7 @@ requests==2.32.3
 six==1.17.0
 SQLAlchemy==2.0.40
 sympy==1.13.1
-torch==2.6.0+cpu
+torch==2.6.0
 tqdm==4.67.1
 typing_extensions==4.13.0
 tzdata==2025.2
