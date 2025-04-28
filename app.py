@@ -36,3 +36,10 @@ def create_app():
 
 # Create the application instance
 app = create_app()
+@app.route('/')
+def home():
+    return "Hello, world!"
+
+# Code to ensure it listens on the right port
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
